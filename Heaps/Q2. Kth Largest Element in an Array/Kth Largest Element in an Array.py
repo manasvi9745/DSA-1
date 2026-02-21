@@ -1,25 +1,15 @@
+import heapq
+
 class Solution:
     def findKthLargest(self, nums, k):
-        k = len(nums) - k  # Convert to kth smallest index
+        min_heap = []
         
-        def quickselect(left, right):
-            pivot = nums[right]
-            p = left
+        for num in nums:
+            heapq.heappush(min_heap, num)
             
-            # Partition
-            for i in range(left, right):
-                if nums[i] <= pivot:
-                    nums[p], nums[i] = nums[i], nums[p]
-                    p += 1
-            
-            nums[p], nums[right] = nums[right], nums[p]
-            
-            # Check position
-            if p == k:
-                return nums[p]
-            elif p < k:
-                return quickselect(p + 1, right)
-            else:
-                return quickselect(left, p - 1)
+            # Keep only k largest elements
+            if len(min_heap) > k:
+                heapq.heappop(min_heap)
         
-        return quickselect(0, len(nums) - 1)
+        # Root of heap is kth largest
+        return min_heap[0]
